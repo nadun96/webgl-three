@@ -25,8 +25,8 @@ function init() {
 	pointLight.add(sphere);
 	scene.add(pointLight);
 
-	gui.add(pointLight, 'intensity', 0, 10); // Slider to control light intensity
-	gui.add(pointLight.position, 'y', 0, 5); // Slider to control light position
+	gui.add(pointLight, 'intensity', 0, 10);
+	gui.add(pointLight.position, 'y', 0, 5);
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -45,7 +45,10 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setClearColor('rgb(120, 120, 120)');
 	document.getElementById('webgl').appendChild(renderer.domElement);
-	update(renderer, scene, camera);
+
+	var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+	update(renderer, scene, camera, controls);
 
 	return scene;
 }
@@ -96,19 +99,22 @@ function getPointLight(intensity) {
 	return light;
 }
 
-function update(renderer, scene, camera) {
+function update(renderer, scene, camera, controls) {
 	renderer.render(
 		scene,
 		camera
 	);
 
+	controls.update();
+
 	requestAnimationFrame(function() {
-		update(renderer, scene, camera);
+		update(renderer, scene, camera, controls);
 	})
 }
 
 var scene = init();
 
-// dat.GUI Library: A tiny JavaScript library that creates user interfaces to control JavaScript variables, useful for real-time scene adjustments.
-// Implementation: Instantiate dat.GUI and use the add method to add parameters for control through a user interface.
-// Dynamic Control: Allows dynamic control of properties like light intensity and position through sliders, enhancing interactivity in the scene.
+
+// Orbit Controls: A script from the three.js examples folder that allows interactive camera movement by dragging the mouse, enhancing scene navigation.
+// Implementation: Instantiate OrbitControls with the camera and renderer domElement, and update it within the requestAnimationFrame call for smooth interaction.
+// Enhanced Viewing: Enables rotating, zooming in, and zooming out of the scene, providing better understanding and flexibility in viewing the 3D environment.
