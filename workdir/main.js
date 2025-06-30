@@ -1,8 +1,8 @@
 function init() {
-	var scene = new THREE.Scene(); // Create a new scene
+	var scene = new THREE.Scene();
 
-	var box = getBox(1, 1, 1); // Create a box mesh
-	var plane = getPlane(4); // Create a plane mesh
+	var box = getBox(1, 1, 1);
+	var plane = getPlane(4);
 
 	box.position.y = box.geometry.parameters.height/2;
 	plane.rotation.x = Math.PI/2;
@@ -30,6 +30,8 @@ function init() {
 		scene,
 		camera 
 	);
+
+	return scene;
 }
 
 function getBox(w, h, d) {
@@ -59,4 +61,8 @@ function getPlane(size) {
 	return mesh;
 }
 
-init();
+var scene = init();
+
+// Object3D Base Class: Most objects in Three.js inherit from the Object3D base class, sharing common properties.
+// Scene Object: The scene object contains all 3D objects and its visibility can be toggled using the visible parameter.
+// Continuous Rendering: To see changes in real-time, such as toggling visibility, the scene needs to be continuously rendered using the requestAnimationFrame method.
