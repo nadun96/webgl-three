@@ -41,3 +41,8 @@ function getBox(w, h, d) {
 }
 
 init();
+
+
+// Creating 3D Objects: 3D objects in Three.js are made up of geometry (shape) and material (surface quality). These combine to form a mesh.
+// Positioning Objects: Objects are created at the 0, 0, 0 coordinate by default. To make them visible, you need to adjust the camera or object position.
+// Camera Adjustment: Move the camera along the z-axis (and optionally x and y axes) to view the object. Use the lookAt method to center the object in the frame
