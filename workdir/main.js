@@ -1,5 +1,6 @@
 function init() {
 	var scene = new THREE.Scene();
+	var gui = new dat.GUI();
 
 	var enableFog = false;
 
@@ -10,18 +11,22 @@ function init() {
 	var box = getBox(1, 1, 1);
 	var plane = getPlane(20);
 	var pointLight = getPointLight(1);
-	var sphere = getSphere(0.05); // Sphere to visualize the light position
+	var sphere = getSphere(0.05);
 
 	plane.name = 'plane-1';
 
 	box.position.y = box.geometry.parameters.height/2;
 	plane.rotation.x = Math.PI/2;
-	pointLight.position.y = 2; // Adjust the y position of the point light to illuminate the scene
+	pointLight.position.y = 2;
+	pointLight.intensity = 2;
 
 	scene.add(box);
 	scene.add(plane);
 	pointLight.add(sphere);
-	scene.add(pointLight); // Add the point light to the scene
+	scene.add(pointLight);
+
+	gui.add(pointLight, 'intensity', 0, 10); // Slider to control light intensity
+	gui.add(pointLight.position, 'y', 0, 5); // Slider to control light position
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -86,7 +91,7 @@ function getSphere(size) {
 }
 
 function getPointLight(intensity) {
-	var light = new THREE.PointLight(0xffffff, intensity); // args are color and intensity
+	var light = new THREE.PointLight(0xffffff, intensity);
 
 	return light;
 }
@@ -104,7 +109,6 @@ function update(renderer, scene, camera) {
 
 var scene = init();
 
-// PointLight: A simple light type emitted from a single point in all directions, similar to a light bulb.
-// Creating PointLight: The video demonstrates creating a PointLight with color and intensity parameters and adding it to the scene.
-// Positioning: Initially, objects are positioned at the origin (0,0,0). Adjusting the y position of the PointLight is necessary to illuminate the scene.
-// Visualizing Light Position: Adding a sphere to the light object helps visualize its position, making it easier to see the effects of lighting adjustments.
+// dat.GUI Library: A tiny JavaScript library that creates user interfaces to control JavaScript variables, useful for real-time scene adjustments.
+// Implementation: Instantiate dat.GUI and use the add method to add parameters for control through a user interface.
+// Dynamic Control: Allows dynamic control of properties like light intensity and position through sliders, enhancing interactivity in the scene.
