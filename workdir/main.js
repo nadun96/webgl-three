@@ -10,18 +10,18 @@ function init() {
 	var box = getBox(1, 1, 1);
 	var plane = getPlane(20);
 	var pointLight = getPointLight(1);
-	var sphere = getSphere(0.05);
+	var sphere = getSphere(0.05); // Sphere to visualize the light position
 
 	plane.name = 'plane-1';
 
 	box.position.y = box.geometry.parameters.height/2;
 	plane.rotation.x = Math.PI/2;
-	pointLight.position.y = 2;
+	pointLight.position.y = 2; // Adjust the y position of the point light to illuminate the scene
 
 	scene.add(box);
 	scene.add(plane);
 	pointLight.add(sphere);
-	scene.add(pointLight);
+	scene.add(pointLight); // Add the point light to the scene
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -86,7 +86,7 @@ function getSphere(size) {
 }
 
 function getPointLight(intensity) {
-	var light = new THREE.PointLight(0xffffff, intensity);
+	var light = new THREE.PointLight(0xffffff, intensity); // args are color and intensity
 
 	return light;
 }
