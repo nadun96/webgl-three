@@ -31,6 +31,7 @@ function init() {
 	return scene;
 }
 
+
 function getBox(w, h, d) {
 	var geometry = new THREE.BoxGeometry(w, h, d);
 	var material = new THREE.MeshBasicMaterial({
@@ -69,3 +70,8 @@ function update(renderer, scene, camera) {
 }
 
 var scene = init();
+
+
+// Continuous Rendering: The requestAnimationFrame function is used to create a continuous rendering loop, allowing for smooth animations.
+// Function Setup: An update function is created to handle rendering, and it is called recursively using requestAnimationFrame.
+// Optimization: requestAnimationFrame optimizes when frames are painted, making it preferable over setInterval for animations.

@@ -26,10 +26,7 @@ function init() {
 	var renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.getElementById('webgl').appendChild(renderer.domElement);
-	renderer.render(
-		scene,
-		camera 
-	);
+	update(renderer, scene, camera);
 
 	return scene;
 }
@@ -61,8 +58,14 @@ function getPlane(size) {
 	return mesh;
 }
 
-var scene = init();
+function update(renderer, scene, camera) {
+	renderer.render(
+		scene,
+		camera
+	);
+	requestAnimationFrame(function() {
+		update(renderer, scene, camera);
+	})
+}
 
-// Object3D Base Class: Most objects in Three.js inherit from the Object3D base class, sharing common properties.
-// Scene Object: The scene object contains all 3D objects and its visibility can be toggled using the visible parameter.
-// Continuous Rendering: To see changes in real-time, such as toggling visibility, the scene needs to be continuously rendered using the requestAnimationFrame method.
+var scene = init();
