@@ -9,14 +9,19 @@ function init() {
 	
 	var box = getBox(1, 1, 1);
 	var plane = getPlane(20);
+	var pointLight = getPointLight(1);
+	var sphere = getSphere(0.05);
 
 	plane.name = 'plane-1';
 
 	box.position.y = box.geometry.parameters.height/2;
 	plane.rotation.x = Math.PI/2;
+	pointLight.position.y = 2;
 
 	scene.add(box);
 	scene.add(plane);
+	pointLight.add(sphere);
+	scene.add(pointLight);
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -58,13 +63,32 @@ function getPlane(size) {
 	var material = new THREE.MeshPhongMaterial({
 		color: 'rgb(120, 120, 120)',
 		side: THREE.DoubleSide
-	}); // meshphogmaterial is used for lighting effects
+	});
 	var mesh = new THREE.Mesh(
 		geometry,
 		material 
 	);
 
 	return mesh;
+}
+
+function getSphere(size) {
+	var geometry = new THREE.SphereGeometry(size, 24, 24);
+	var material = new THREE.MeshBasicMaterial({
+		color: 'rgb(255, 255, 255)'
+	});
+	var mesh = new THREE.Mesh(
+		geometry,
+		material 
+	);
+
+	return mesh;
+}
+
+function getPointLight(intensity) {
+	var light = new THREE.PointLight(0xffffff, intensity);
+
+	return light;
 }
 
 function update(renderer, scene, camera) {
@@ -80,7 +104,7 @@ function update(renderer, scene, camera) {
 
 var scene = init();
 
-
-// Material Impact: The current use of MeshBasicMaterial results in flat shading, making it hard to appreciate the 3D nature of the scene.
-// Switching Materials: Switching to MeshPhongMaterial allows the scene to be affected by lighting, enhancing the 3D appearance.
-// Lighting Necessity: Without lights in the scene, objects with realistic materials will render black. Adding lights is essential to see the effects of the materials.
+// PointLight: A simple light type emitted from a single point in all directions, similar to a light bulb.
+// Creating PointLight: The video demonstrates creating a PointLight with color and intensity parameters and adding it to the scene.
+// Positioning: Initially, objects are positioned at the origin (0,0,0). Adjusting the y position of the PointLight is necessary to illuminate the scene.
+// Visualizing Light Position: Adding a sphere to the light object helps visualize its position, making it easier to see the effects of lighting adjustments.
