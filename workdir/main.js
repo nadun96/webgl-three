@@ -8,22 +8,21 @@ function init() {
 		scene.fog = new THREE.FogExp2(0xffffff, 0.2);
 	}
 
-	var box = getBox(1, 1, 1);
-	var plane = getPlane(20);
+	var plane = getPlane(30);
 	var pointLight = getPointLight(1);
 	var sphere = getSphere(0.05);
+	var boxGrid = getBoxGrid(10, 2);
 
 	plane.name = "plane-1";
 
-	box.position.y = box.geometry.parameters.height / 2;
 	plane.rotation.x = Math.PI / 2;
 	pointLight.position.y = 2;
 	pointLight.intensity = 2;
 
-	scene.add(box);
 	scene.add(plane);
 	pointLight.add(sphere);
 	scene.add(pointLight);
+	scene.add(boxGrid);
 
 	gui.add(pointLight, "intensity", 0, 10);
 	gui.add(pointLight.position, "y", 0, 5);
@@ -63,6 +62,29 @@ function getBox(w, h, d) {
 	mesh.castShadow = true;
 
 	return mesh;
+}
+
+function getBoxGrid(amount, separationMultiplier) {
+	var group = new THREE.Group();
+
+	for (var i = 0; i < amount; i++) {
+		var obj = getBox(1, 1, 1);
+		obj.position.x = i * separationMultiplier;
+		obj.position.y = obj.geometry.parameters.height / 2;
+		group.add(obj);
+		for (var j = 1; j < amount; j++) {
+			var obj = getBox(1, 1, 1);
+			obj.position.x = i * separationMultiplier;
+			obj.position.y = obj.geometry.parameters.height / 2;
+			obj.position.z = j * separationMultiplier;
+			group.add(obj);
+		}
+	}
+
+	group.position.x = -(separationMultiplier * (amount - 1)) / 2;
+	group.position.z = -(separationMultiplier * (amount - 1)) / 2;
+
+	return group;
 }
 
 function getPlane(size) {
@@ -106,10 +128,6 @@ function update(renderer, scene, camera, controls) {
 
 var scene = init();
 
-
-// Importance of Shadows: Shadows are crucial for understanding the dimensionality of a scene.
-// Activating Shadow Rendering: You need to enable shadow rendering in multiple places: the renderer, the light source, and the objects that cast or receive shadows.
-// Implementation Steps:
-// Enable shadow rendering for the renderer.
-// Set the light source (e.g., Point Light) to cast shadows.
-// Configure objects to cast or receive shadows (e.g., a box to cast shadows and a plane to receive shadows).
+// Creating a Grid of Boxes: Instead of a single box, a grid of boxes is created using a function called getBoxGrid.
+// Using Groups: The Three.js Group object is used to organize and move multiple objects together easily.
+// Adjusting the Scene: The single box is removed, and the grid of boxes is added to the scene, along with adjustments to the plane size to accommodate the new objects.
