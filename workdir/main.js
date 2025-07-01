@@ -1,6 +1,7 @@
 function init() {
 	var scene = new THREE.Scene();
 	var gui = new dat.GUI();
+	var clock = new THREE.Clock();
 
 	var enableFog = false;
 
@@ -53,7 +54,7 @@ function init() {
 
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	update(renderer, scene, camera, controls);
+	update(renderer, scene, camera, controls, clock);
 
 	return scene;
 }
@@ -144,24 +145,26 @@ function getDirectionalLight(intensity) {
 	return light;
 }
 
-function update(renderer, scene, camera, controls) {
+function update(renderer, scene, camera, controls, clock) {
 	renderer.render(scene, camera);
 
 	controls.update();
 
+	var timeElapsed = clock.getElapsedTime();
+
 	var boxGrid = scene.getObjectByName("boxGrid");
-	boxGrid.children.forEach(function (child) {
-		child.scale.y = Math.random();
+	boxGrid.children.forEach(function (child, index) {
+		child.scale.y = (Math.sin(timeElapsed * 5 + index) + 1) / 2 + 0.001;
 		child.position.y = child.scale.y / 2;
 	});
 
 	requestAnimationFrame(function () {
-		update(renderer, scene, camera, controls);
+		update(renderer, scene, camera, controls, clock);
 	});
 }
 
 var scene = init();
 
-// Math.random() Function: Returns a random value between 0 and 1 each time it's executed, useful for creating random animations.
-// Animating Objects: The video demonstrates how to animate the Y position and scale of objects using Math.random().
-// Smoothness of Animation: Random values can result in jagged animations. For smoother, continuous animations, consider using functions like Math.sin() and Math.cos().
+// Sine and Cosine Functions: Generate values between -1 and 1, which can be used for smooth, continuous animations.
+// Using Three.js Clock: The THREE.Clock object tracks elapsed time, which can be fed into sine or cosine functions for animation.
+// Adjusting Values: To keep values between 0 and 1, add 1 to the sine function's output and then divide by 2. This helps avoid negative values in animations.
