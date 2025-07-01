@@ -176,3 +176,7 @@ function update(renderer, scene, camera, controls) {
 }
 
 var scene = init();
+
+// Ambient Light Characteristics: Illuminates all objects in the scene equally without casting shadows.
+// Usage: Best used sparingly to add uniform brightness and lift the color of shadows without creating a washed-out effect.
+// Implementation: Create an ambient light function, set its color to a bluish tone, and add it to the scene.

@@ -13,11 +13,14 @@ function init() {
 	var sphere = getSphere(0.05);
 	var boxGrid = getBoxGrid(10, 1.5);
 	var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
+	var ambientLight = getAmbientLight(10);
 
 	plane.name = "plane-1";
 
 	plane.rotation.x = Math.PI / 2;
-	directionalLight.position.y = 4;
+	directionalLight.position.x = 13;
+	directionalLight.position.y = 10;
+	directionalLight.position.z = 10;
 	directionalLight.intensity = 2;
 
 	scene.add(plane);
@@ -25,6 +28,7 @@ function init() {
 	scene.add(directionalLight);
 	scene.add(boxGrid);
 	scene.add(helper);
+	scene.add(ambientLight);
 
 	gui.add(directionalLight, "intensity", 0, 10);
 	gui.add(directionalLight.position, "x", 0, 20);
@@ -143,6 +147,12 @@ function getDirectionalLight(intensity) {
 	return light;
 }
 
+function getAmbientLight(intensity) {
+	var light = new THREE.AmbientLight("rgb(10, 30, 50)", intensity);
+
+	return light;
+}
+
 function update(renderer, scene, camera, controls) {
 	renderer.render(scene, camera);
 
@@ -154,11 +164,7 @@ function update(renderer, scene, camera, controls) {
 }
 
 var scene = init();
-// Directional Lights: Emit parallel light rays, ideal for simulating distant light sources like the sun.
-// Shadow Behavior: Shadows cast by directional lights are parallel.
-// Implementation:
-// Create a function to wrap the three.js directional light function.
-// Update references from spotlights to directional lights.
-// Remove the penumbra parameter as it doesn't apply to directional lights.
 
-// Shadow Camera: Use a camera helper to visualize and adjust the shadow camera's field of view to ensure all objects cast shadows
+// Ambient Light Characteristics: Illuminates all objects in the scene equally without casting shadows.
+// Usage: Best used sparingly to add uniform brightness and lift the color of shadows without creating a washed-out effect.
+// Implementation: Create an ambient light function, set its color to a bluish tone, and add it to the scene.
