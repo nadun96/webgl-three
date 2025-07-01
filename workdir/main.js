@@ -168,3 +168,7 @@ var scene = init();
 // Ambient Light Characteristics: Illuminates all objects in the scene equally without casting shadows.
 // Usage: Best used sparingly to add uniform brightness and lift the color of shadows without creating a washed-out effect.
 // Implementation: Create an ambient light function, set its color to a bluish tone, and add it to the scene.
+
+// Realistic Lighting: Rectangular Area Lights are more realistic compared to PointLights and SpotLights because they have dimensions.
+// Development Status: At the time of the tutorial, Rectangular Area Lights are still under active development in Three.js and not ready for production use.
+// Usage: Once fully developed, Rectangular Area Lights can yield more physically accurate lighting results, and you can experiment with their parameters to see how they work.
