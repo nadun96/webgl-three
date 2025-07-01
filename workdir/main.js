@@ -9,26 +9,27 @@ function init() {
 	}
 
 	var plane = getPlane(30);
-	var spotLight = getSpotLight(1);
+	var directionalLight = getDirectionalLight(1);
 	var sphere = getSphere(0.05);
 	var boxGrid = getBoxGrid(10, 1.5);
+	var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
 
 	plane.name = "plane-1";
 
 	plane.rotation.x = Math.PI / 2;
-	spotLight.position.y = 4;
-	spotLight.intensity = 2;
+	directionalLight.position.y = 4;
+	directionalLight.intensity = 2;
 
 	scene.add(plane);
-	spotLight.add(sphere);
-	scene.add(spotLight);
+	directionalLight.add(sphere);
+	scene.add(directionalLight);
 	scene.add(boxGrid);
+	scene.add(helper);
 
-	gui.add(spotLight, "intensity", 0, 10);
-	gui.add(spotLight.position, "x", 0, 20);
-	gui.add(spotLight.position, "y", 0, 20);
-	gui.add(spotLight.position, "z", 0, 20);
-	gui.add(spotLight, "penumbra", 0, 1);
+	gui.add(directionalLight, "intensity", 0, 10);
+	gui.add(directionalLight.position, "x", 0, 20);
+	gui.add(directionalLight.position, "y", 0, 20);
+	gui.add(directionalLight.position, "z", 0, 20);
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -130,6 +131,18 @@ function getSpotLight(intensity) {
 	return light;
 }
 
+function getDirectionalLight(intensity) {
+	var light = new THREE.DirectionalLight(0xffffff, intensity);
+	light.castShadow = true;
+
+	light.shadow.camera.left = -10;
+	light.shadow.camera.bottom = -10;
+	light.shadow.camera.right = 10;
+	light.shadow.camera.top = 10;
+
+	return light;
+}
+
 function update(renderer, scene, camera, controls) {
 	renderer.render(scene, camera);
 
@@ -141,7 +154,11 @@ function update(renderer, scene, camera, controls) {
 }
 
 var scene = init();
+// Directional Lights: Emit parallel light rays, ideal for simulating distant light sources like the sun.
+// Shadow Behavior: Shadows cast by directional lights are parallel.
+// Implementation:
+// Create a function to wrap the three.js directional light function.
+// Update references from spotlights to directional lights.
+// Remove the penumbra parameter as it doesn't apply to directional lights.
 
-// Creating a SpotLight: You can create a SpotLight using the three.SpotLight function, similar to the PointLight function.
-// SpotLight Characteristics: SpotLights emit light in a cone shape, and the sharpness of the light's edge can be adjusted using the penumbra parameter.
-// Shadow Adjustments: Adjusting the bias value on the light shadow can help fix common shadow artifacts, and increasing the shadow map resolution can make shadows sharper.
+// Shadow Camera: Use a camera helper to visualize and adjust the shadow camera's field of view to ensure all objects cast shadows
