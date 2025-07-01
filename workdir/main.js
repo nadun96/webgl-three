@@ -9,23 +9,26 @@ function init() {
 	}
 
 	var plane = getPlane(30);
-	var pointLight = getPointLight(1);
+	var spotLight = getSpotLight(1);
 	var sphere = getSphere(0.05);
-	var boxGrid = getBoxGrid(10, 2);
+	var boxGrid = getBoxGrid(10, 1.5);
 
 	plane.name = "plane-1";
 
 	plane.rotation.x = Math.PI / 2;
-	pointLight.position.y = 2;
-	pointLight.intensity = 2;
+	spotLight.position.y = 4;
+	spotLight.intensity = 2;
 
 	scene.add(plane);
-	pointLight.add(sphere);
-	scene.add(pointLight);
+	spotLight.add(sphere);
+	scene.add(spotLight);
 	scene.add(boxGrid);
 
-	gui.add(pointLight, "intensity", 0, 10);
-	gui.add(pointLight.position, "y", 0, 5);
+	gui.add(spotLight, "intensity", 0, 10);
+	gui.add(spotLight.position, "x", 0, 20);
+	gui.add(spotLight.position, "y", 0, 20);
+	gui.add(spotLight.position, "z", 0, 20);
+	gui.add(spotLight, "penumbra", 0, 1);
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -116,6 +119,17 @@ function getPointLight(intensity) {
 	return light;
 }
 
+function getSpotLight(intensity) {
+	var light = new THREE.SpotLight(0xffffff, intensity);
+	light.castShadow = true;
+
+	light.shadow.bias = 0.001;
+	light.shadow.mapSize.width = 2048;
+	light.shadow.mapSize.height = 2048;
+
+	return light;
+}
+
 function update(renderer, scene, camera, controls) {
 	renderer.render(scene, camera);
 
@@ -128,6 +142,6 @@ function update(renderer, scene, camera, controls) {
 
 var scene = init();
 
-// Creating a Grid of Boxes: Instead of a single box, a grid of boxes is created using a function called getBoxGrid.
-// Using Groups: The Three.js Group object is used to organize and move multiple objects together easily.
-// Adjusting the Scene: The single box is removed, and the grid of boxes is added to the scene, along with adjustments to the plane size to accommodate the new objects.
+// Creating a SpotLight: You can create a SpotLight using the three.SpotLight function, similar to the PointLight function.
+// SpotLight Characteristics: SpotLights emit light in a cone shape, and the sharpness of the light's edge can be adjusted using the penumbra parameter.
+// Shadow Adjustments: Adjusting the bias value on the light shadow can help fix common shadow artifacts, and increasing the shadow map resolution can make shadows sharper.
