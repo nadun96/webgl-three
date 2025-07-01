@@ -12,10 +12,9 @@ function init() {
 	var directionalLight = getDirectionalLight(1);
 	var sphere = getSphere(0.05);
 	var boxGrid = getBoxGrid(10, 1.5);
-	var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-	var ambientLight = getAmbientLight(10);
 
 	plane.name = "plane-1";
+	boxGrid.name = "boxGrid";
 
 	plane.rotation.x = Math.PI / 2;
 	directionalLight.position.x = 13;
@@ -27,8 +26,6 @@ function init() {
 	directionalLight.add(sphere);
 	scene.add(directionalLight);
 	scene.add(boxGrid);
-	scene.add(helper);
-	scene.add(ambientLight);
 
 	gui.add(directionalLight, "intensity", 0, 10);
 	gui.add(directionalLight.position, "x", 0, 20);
@@ -42,9 +39,9 @@ function init() {
 		1000
 	);
 
-	camera.position.x = 1;
-	camera.position.y = 2;
-	camera.position.z = 5;
+	camera.position.x = 10;
+	camera.position.y = 18;
+	camera.position.z = -18;
 
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -147,16 +144,16 @@ function getDirectionalLight(intensity) {
 	return light;
 }
 
-function getAmbientLight(intensity) {
-	var light = new THREE.AmbientLight("rgb(10, 30, 50)", intensity);
-
-	return light;
-}
-
 function update(renderer, scene, camera, controls) {
 	renderer.render(scene, camera);
 
 	controls.update();
+
+	var boxGrid = scene.getObjectByName("boxGrid");
+	boxGrid.children.forEach(function (child) {
+		child.scale.y = Math.random();
+		child.position.y = child.scale.y / 2;
+	});
 
 	requestAnimationFrame(function () {
 		update(renderer, scene, camera, controls);
@@ -165,10 +162,6 @@ function update(renderer, scene, camera, controls) {
 
 var scene = init();
 
-// Ambient Light Characteristics: Illuminates all objects in the scene equally without casting shadows.
-// Usage: Best used sparingly to add uniform brightness and lift the color of shadows without creating a washed-out effect.
-// Implementation: Create an ambient light function, set its color to a bluish tone, and add it to the scene.
-
-// Realistic Lighting: Rectangular Area Lights are more realistic compared to PointLights and SpotLights because they have dimensions.
-// Development Status: At the time of the tutorial, Rectangular Area Lights are still under active development in Three.js and not ready for production use.
-// Usage: Once fully developed, Rectangular Area Lights can yield more physically accurate lighting results, and you can experiment with their parameters to see how they work.
+// Math.random() Function: Returns a random value between 0 and 1 each time it's executed, useful for creating random animations.
+// Animating Objects: The video demonstrates how to animate the Y position and scale of objects using Math.random().
+// Smoothness of Animation: Random values can result in jagged animations. For smoother, continuous animations, consider using functions like Math.sin() and Math.cos().
