@@ -28,32 +28,25 @@ function init() {
 	scene.add(directionalLight);
 	scene.add(boxGrid);
 
-	gui.add(directionalLight, 'intensity', 0, 10);
-	gui.add(directionalLight.position, 'x', 0, 20);
-	gui.add(directionalLight.position, 'y', 0, 20);
-	gui.add(directionalLight.position, 'z', 0, 20);
-
-	// var camera = new THREE.PerspectiveCamera(
-	// 	45,
-	// 	window.innerWidth/window.innerHeight,
-	// 	1,
-	// 	1000
-	// );
-
-	var camera = new THREE.OrthographicCamera(
-		-15,
-		15,
-		15,
-		-15,
+	var camera = new THREE.PerspectiveCamera(
+		45,
+		window.innerWidth / window.innerHeight,
 		1,
 		1000
 	);
 
-	camera.position.x = 10;
-	camera.position.y = 18;
-	camera.position.z = -18;
+	var cameraZPosition = new THREE.Group();
+	var cameraXRotation = new THREE.Group();
+	var cameraYRotation = new THREE.Group();
 
-	camera.lookAt(new THREE.Vector3(0, 0, 0));
+	cameraZPosition.add(camera);
+	cameraXRotation.add(cameraZPosition);
+	cameraYRotation.add(cameraXRotation);
+	scene.add(cameraYRotation);
+
+	gui.add(cameraZPosition.position, 'z', 0, 100);
+	gui.add(cameraYRotation.rotation, 'y', -Math.PI, Math.PI);
+	gui.add(cameraXRotation.rotation, 'x', -Math.PI, Math.PI);
 
 	var renderer = new THREE.WebGLRenderer();
 	renderer.shadowMap.enabled = true;
@@ -187,7 +180,8 @@ function update(renderer, scene, camera, controls, clock) {
 
 var scene = init();
 
-// Types of Cameras: Three.js supports two main types of cameras: Perspective and Orthographic.
-// Perspective Camera: Mimics natural human vision, where objects appear smaller as they get farther from the camera.
-// Orthographic Camera: No perspective effects, meaning objects maintain their size regardless of distance from the camera. Commonly used in technical drawings and isometric games.
-// Setting Up Orthographic Camera: Parameters include left, right, top, bottom planes, and near and far planes to define the camera rostrum.
+
+// Camera Positioning: Adjusting the camera's Z and Y positions to move it closer to the scene and higher above the ground plane.
+// Scene Adjustments: Enlarging the ground plane and increasing the separation between boxes to create a larger scene.
+// Tumbling Animation: Adding a rotation controller for the Z axis to create a natural tumbling motion for the camera.
+// Noise Function: Using the Perlin noise function to add subtle, natural-looking camera movements.
