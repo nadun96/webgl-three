@@ -8,7 +8,7 @@ function init() {
 	if (enableFog) {
 		scene.fog = new THREE.FogExp2(0xffffff, 0.01);
 	}
-	
+
 	var plane = getPlane(100);
 	var directionalLight = getDirectionalLight(1);
 	var sphere = getSphere(0.05);
@@ -17,7 +17,7 @@ function init() {
 	plane.name = 'plane-1';
 	boxGrid.name = 'boxGrid';
 
-	plane.rotation.x = Math.PI/2;
+	plane.rotation.x = Math.PI / 2;
 	directionalLight.position.x = 13;
 	directionalLight.position.y = 10;
 	directionalLight.position.z = 10;
@@ -30,7 +30,7 @@ function init() {
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
-		window.innerWidth/window.innerHeight,
+		window.innerWidth / window.innerHeight,
 		1,
 		1000
 	);
@@ -54,31 +54,31 @@ function init() {
 	cameraYRotation.add(cameraXRotation);
 	scene.add(cameraYRotation);
 
-	cameraXRotation.rotation.x = -Math.PI/2;
+	cameraXRotation.rotation.x = -Math.PI / 2;
 	cameraYPosition.position.y = 1;
 	cameraZPosition.position.z = 100;
 
-	new TWEEN.Tween({val: 100})
-		.to({val: -50}, 12000)
-		.onUpdate(function() {
+	new TWEEN.Tween({ val: 100 })
+		.to({ val: -50 }, 12000)
+		.onUpdate(function () {
 			cameraZPosition.position.z = this.val;
 		})
 		.start();
 
-	new TWEEN.Tween({val: -Math.PI/2})
-		.to({val: 0}, 6000)
+	new TWEEN.Tween({ val: -Math.PI / 2 })
+		.to({ val: 0 }, 6000)
 		.delay(1000)
 		.easing(TWEEN.Easing.Quadratic.InOut)
-		.onUpdate(function() {
+		.onUpdate(function () {
 			cameraXRotation.rotation.x = this.val;
 		})
 		.start();
 
-	new TWEEN.Tween({val: 0})
-		.to({val: Math.PI/2}, 6000)
+	new TWEEN.Tween({ val: 0 })
+		.to({ val: Math.PI / 2 }, 6000)
 		.delay(1000)
 		.easing(TWEEN.Easing.Quadratic.InOut)
-		.onUpdate(function() {
+		.onUpdate(function () {
 			cameraYRotation.rotation.y = this.val;
 		})
 		.start();
@@ -108,7 +108,7 @@ function getBox(w, h, d) {
 	});
 	var mesh = new THREE.Mesh(
 		geometry,
-		material 
+		material
 	);
 	mesh.castShadow = true;
 
@@ -118,22 +118,22 @@ function getBox(w, h, d) {
 function getBoxGrid(amount, separationMultiplier) {
 	var group = new THREE.Group();
 
-	for (var i=0; i<amount; i++) {
+	for (var i = 0; i < amount; i++) {
 		var obj = getBox(1, 3, 1);
 		obj.position.x = i * separationMultiplier;
-		obj.position.y = obj.geometry.parameters.height/2;
+		obj.position.y = obj.geometry.parameters.height / 2;
 		group.add(obj);
-		for (var j=1; j<amount; j++) {
+		for (var j = 1; j < amount; j++) {
 			var obj = getBox(1, 3, 1);
 			obj.position.x = i * separationMultiplier;
-			obj.position.y = obj.geometry.parameters.height/2;
+			obj.position.y = obj.geometry.parameters.height / 2;
 			obj.position.z = j * separationMultiplier;
 			group.add(obj);
 		}
 	}
 
-	group.position.x = -(separationMultiplier * (amount-1))/2;
-	group.position.z = -(separationMultiplier * (amount-1))/2;
+	group.position.x = -(separationMultiplier * (amount - 1)) / 2;
+	group.position.z = -(separationMultiplier * (amount - 1)) / 2;
 
 	return group;
 }
@@ -146,7 +146,7 @@ function getPlane(size) {
 	});
 	var mesh = new THREE.Mesh(
 		geometry,
-		material 
+		material
 	);
 	mesh.receiveShadow = true;
 
@@ -160,7 +160,7 @@ function getSphere(size) {
 	});
 	var mesh = new THREE.Mesh(
 		geometry,
-		material 
+		material
 	);
 
 	return mesh;
@@ -214,15 +214,21 @@ function update(renderer, scene, camera, controls, clock) {
 	cameraZRotation.rotation.z = noise.simplex2(timeElapsed * 1.5, timeElapsed * 1.5) * 0.02;
 
 	var boxGrid = scene.getObjectByName('boxGrid');
-	boxGrid.children.forEach(function(child, index) {
+	boxGrid.children.forEach(function (child, index) {
 		var x = timeElapsed + index;
 		child.scale.y = (noise.simplex2(x, x) + 1) / 2 + 0.001;
-		child.position.y = child.scale.y/2;
+		child.position.y = child.scale.y / 2;
 	});
 
-	requestAnimationFrame(function() {
+	requestAnimationFrame(function () {
 		update(renderer, scene, camera, controls, clock);
 	})
 }
 
 var scene = init();
+
+
+// Tween.js Library: Tween.js is a JavaScript library that provides more control over the duration and style of animations using easing curves.
+// Usage: You can instantiate a Tween object with initial values and target values, and control animations outside the update function.
+// Easing: Tween.js allows adding easing to animations, which adjusts the pacing to make them feel more natural and smooth.
+// Animation Control: The library offers methods like delay and easing to fine-tune the start time and behavior of animations.
