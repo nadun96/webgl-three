@@ -15,6 +15,7 @@
 
 <body>
     <div id="webgl"></div>
+    <script src="/lib/perlin.js"></script>
     <script src="./lib/three.js"></script>
     <script src="./lib/dat.gui.min.js"></script>
     <script src="./lib/OrbitControls.js"></script>
@@ -22,3 +23,9 @@
 </body>
 
 </html>
+
+<!-- 
+Perlin Noise Function: JavaScript doesn't have a built-in noise function, so a third-party library is used to implement the Perlin noise function.
+Library Integration: The Perlin noise library can be downloaded from GitHub and included in your project files.
+Using Simplex2: The simplex2 function from the noise library is used to generate noise, taking two continuous values as arguments.
+Replacing Sine Function: The simplex2 function can be used instead of the sine function to create more natural, less predictable noise patterns. -->

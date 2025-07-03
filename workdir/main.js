@@ -14,8 +14,8 @@ function init() {
 	var sphere = getSphere(0.05);
 	var boxGrid = getBoxGrid(10, 1.5);
 
-	plane.name = "plane-1";
-	boxGrid.name = "boxGrid";
+	plane.name = 'plane-1';
+	boxGrid.name = 'boxGrid';
 
 	plane.rotation.x = Math.PI / 2;
 	directionalLight.position.x = 13;
@@ -28,10 +28,10 @@ function init() {
 	scene.add(directionalLight);
 	scene.add(boxGrid);
 
-	gui.add(directionalLight, "intensity", 0, 10);
-	gui.add(directionalLight.position, "x", 0, 20);
-	gui.add(directionalLight.position, "y", 0, 20);
-	gui.add(directionalLight.position, "z", 0, 20);
+	gui.add(directionalLight, 'intensity', 0, 10);
+	gui.add(directionalLight.position, 'x', 0, 20);
+	gui.add(directionalLight.position, 'y', 0, 20);
+	gui.add(directionalLight.position, 'z', 0, 20);
 
 	var camera = new THREE.PerspectiveCamera(
 		45,
@@ -49,8 +49,8 @@ function init() {
 	var renderer = new THREE.WebGLRenderer();
 	renderer.shadowMap.enabled = true;
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.setClearColor("rgb(120, 120, 120)");
-	document.getElementById("webgl").appendChild(renderer.domElement);
+	renderer.setClearColor('rgb(120, 120, 120)');
+	document.getElementById('webgl').appendChild(renderer.domElement);
 
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -62,9 +62,12 @@ function init() {
 function getBox(w, h, d) {
 	var geometry = new THREE.BoxGeometry(w, h, d);
 	var material = new THREE.MeshPhongMaterial({
-		color: "rgb(120, 120, 120)",
+		color: 'rgb(120, 120, 120)'
 	});
-	var mesh = new THREE.Mesh(geometry, material);
+	var mesh = new THREE.Mesh(
+		geometry,
+		material
+	);
 	mesh.castShadow = true;
 
 	return mesh;
@@ -96,10 +99,13 @@ function getBoxGrid(amount, separationMultiplier) {
 function getPlane(size) {
 	var geometry = new THREE.PlaneGeometry(size, size);
 	var material = new THREE.MeshPhongMaterial({
-		color: "rgb(120, 120, 120)",
-		side: THREE.DoubleSide,
+		color: 'rgb(120, 120, 120)',
+		side: THREE.DoubleSide
 	});
-	var mesh = new THREE.Mesh(geometry, material);
+	var mesh = new THREE.Mesh(
+		geometry,
+		material
+	);
 	mesh.receiveShadow = true;
 
 	return mesh;
@@ -108,9 +114,12 @@ function getPlane(size) {
 function getSphere(size) {
 	var geometry = new THREE.SphereGeometry(size, 24, 24);
 	var material = new THREE.MeshBasicMaterial({
-		color: "rgb(255, 255, 255)",
+		color: 'rgb(255, 255, 255)'
 	});
-	var mesh = new THREE.Mesh(geometry, material);
+	var mesh = new THREE.Mesh(
+		geometry,
+		material
+	);
 
 	return mesh;
 }
@@ -146,25 +155,25 @@ function getDirectionalLight(intensity) {
 }
 
 function update(renderer, scene, camera, controls, clock) {
-	renderer.render(scene, camera);
+	renderer.render(
+		scene,
+		camera
+	);
 
 	controls.update();
 
 	var timeElapsed = clock.getElapsedTime();
 
-	var boxGrid = scene.getObjectByName("boxGrid");
+	var boxGrid = scene.getObjectByName('boxGrid');
 	boxGrid.children.forEach(function (child, index) {
-		child.scale.y = (Math.sin(timeElapsed * 5 + index) + 1) / 2 + 0.001;
+		var x = timeElapsed * 5 + index;
+		child.scale.y = (noise.simplex2(x, x) + 1) / 2 + 0.001;
 		child.position.y = child.scale.y / 2;
 	});
 
 	requestAnimationFrame(function () {
 		update(renderer, scene, camera, controls, clock);
-	});
+	})
 }
 
 var scene = init();
-
-// Sine and Cosine Functions: Generate values between -1 and 1, which can be used for smooth, continuous animations.
-// Using Three.js Clock: The THREE.Clock object tracks elapsed time, which can be fed into sine or cosine functions for animation.
-// Adjusting Values: To keep values between 0 and 1, add 1 to the sine function's output and then divide by 2. This helps avoid negative values in animations.
