@@ -180,6 +180,10 @@ function update(renderer, scene, camera, controls, clock) {
 
 var scene = init();
 
+// Purpose of Animation Rig: An animation rig consists of helper objects to facilitate the animation process, making it easier to manage transformations.
+// Creating Controllers: The video demonstrates creating controllers for the camera's z position, y rotation, and x rotation to control the camera's movement and rotation.
+// Managing Transformations: Isolating specific transformations to specific objects helps keep the animation process manageable and allows for more complex movements.
+
 
 // Camera Positioning: Adjusting the camera's Z and Y positions to move it closer to the scene and higher above the ground plane.
 // Scene Adjustments: Enlarging the ground plane and increasing the separation between boxes to create a larger scene.
