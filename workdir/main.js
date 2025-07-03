@@ -33,9 +33,18 @@ function init() {
 	gui.add(directionalLight.position, 'y', 0, 20);
 	gui.add(directionalLight.position, 'z', 0, 20);
 
-	var camera = new THREE.PerspectiveCamera(
-		45,
-		window.innerWidth / window.innerHeight,
+	// var camera = new THREE.PerspectiveCamera(
+	// 	45,
+	// 	window.innerWidth/window.innerHeight,
+	// 	1,
+	// 	1000
+	// );
+
+	var camera = new THREE.OrthographicCamera(
+		-15,
+		15,
+		15,
+		-15,
 		1,
 		1000
 	);
@@ -177,3 +186,8 @@ function update(renderer, scene, camera, controls, clock) {
 }
 
 var scene = init();
+
+// Types of Cameras: Three.js supports two main types of cameras: Perspective and Orthographic.
+// Perspective Camera: Mimics natural human vision, where objects appear smaller as they get farther from the camera.
+// Orthographic Camera: No perspective effects, meaning objects maintain their size regardless of distance from the camera. Commonly used in technical drawings and isometric games.
+// Setting Up Orthographic Camera: Parameters include left, right, top, bottom planes, and near and far planes to define the camera rostrum.

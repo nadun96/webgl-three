@@ -15,7 +15,7 @@
 
 <body>
     <div id="webgl"></div>
-    <script src="/lib/perlin.js"></script>
+    <script src="./lib/perlin.js"></script>
     <script src="./lib/three.js"></script>
     <script src="./lib/dat.gui.min.js"></script>
     <script src="./lib/OrbitControls.js"></script>
@@ -23,9 +23,10 @@
 </body>
 
 </html>
-
 <!-- 
-Perlin Noise Function: JavaScript doesn't have a built-in noise function, so a third-party library is used to implement the Perlin noise function.
-Library Integration: The Perlin noise library can be downloaded from GitHub and included in your project files.
-Using Simplex2: The simplex2 function from the noise library is used to generate noise, taking two continuous values as arguments.
-Replacing Sine Function: The simplex2 function can be used instead of the sine function to create more natural, less predictable noise patterns. -->
+Types of Cameras: Three.js supports two main types of cameras: Perspective and Orthographic.
+Perspective Camera: Mimics natural human vision, where objects appear smaller as they get farther from the camera.
+Orthographic Camera: No perspective effects, meaning objects maintain their size regardless of distance from the camera.
+Commonly used in technical drawings and isometric games.
+Setting Up Orthographic Camera: Parameters include left, right, top, bottom planes, and near and far planes to define
+the camera rostrum. -->
