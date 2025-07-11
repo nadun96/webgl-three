@@ -1,191 +1,139 @@
 function init() {
 	var scene = new THREE.Scene();
 	var gui = new dat.GUI();
-	var clock = new THREE.Clock();
 
-	var enableFog = false;
+	// initialize objects
+	var sphereMaterial = getMaterial('basic', 'rgb(255, 0, 0)');
+	var sphere = getSphere(sphereMaterial, 1, 24);
 
-	if (enableFog) {
-		scene.fog = new THREE.FogExp2(0xffffff, 0.2);
-	}
+	var planeMaterial = getMaterial('basic', 'rgb(0, 0, 255)');
+	var plane = getPlane(planeMaterial, 30);
 
-	var plane = getPlane(30);
-	var directionalLight = getDirectionalLight(1);
-	var sphere = getSphere(0.05);
-	var boxGrid = getBoxGrid(10, 1.5);
+	var lightLeft = getSpotLight(1, 'rgb(255, 220, 180)');
+	var lightRight = getSpotLight(1, 'rgb(255, 220, 180)');
 
-	plane.name = 'plane-1';
-	boxGrid.name = 'boxGrid';
-
+	// manipulate objects
+	sphere.position.y = sphere.geometry.parameters.radius;
 	plane.rotation.x = Math.PI / 2;
-	directionalLight.position.x = 13;
-	directionalLight.position.y = 10;
-	directionalLight.position.z = 10;
-	directionalLight.intensity = 2;
 
+	lightLeft.position.x = -5;
+	lightLeft.position.y = 2;
+	lightLeft.position.z = -4;
+
+	lightRight.position.x = 5;
+	lightRight.position.y = 2;
+	lightRight.position.z = -4;
+
+	// manipulate materials
+
+	// dat.gui
+	var folder1 = gui.addFolder('light_1');
+	folder1.add(lightLeft, 'intensity', 0, 10);
+	folder1.add(lightLeft.position, 'x', -5, 15);
+	folder1.add(lightLeft.position, 'y', -5, 15);
+	folder1.add(lightLeft.position, 'z', -5, 15);
+
+	var folder2 = gui.addFolder('light_2');
+	folder2.add(lightRight, 'intensity', 0, 10);
+	folder2.add(lightRight.position, 'x', -5, 15);
+	folder2.add(lightRight.position, 'y', -5, 15);
+	folder2.add(lightRight.position, 'z', -5, 15);
+
+	// add objects to the scene
+	scene.add(sphere);
 	scene.add(plane);
-	directionalLight.add(sphere);
-	scene.add(directionalLight);
-	scene.add(boxGrid);
+	scene.add(lightLeft);
+	scene.add(lightRight);
 
+	// camera
 	var camera = new THREE.PerspectiveCamera(
-		45,
-		window.innerWidth / window.innerHeight,
-		1,
-		1000
+		45, // field of view
+		window.innerWidth / window.innerHeight, // aspect ratio
+		1, // near clipping plane
+		1000 // far clipping plane
 	);
+	camera.position.z = 7;
+	camera.position.x = -2;
+	camera.position.y = 7;
+	camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-	var cameraZPosition = new THREE.Group();
-	var cameraXRotation = new THREE.Group();
-	var cameraYRotation = new THREE.Group();
-
-	cameraZPosition.add(camera);
-	cameraXRotation.add(cameraZPosition);
-	cameraYRotation.add(cameraXRotation);
-	scene.add(cameraYRotation);
-
-	gui.add(cameraZPosition.position, 'z', 0, 100);
-	gui.add(cameraYRotation.rotation, 'y', -Math.PI, Math.PI);
-	gui.add(cameraXRotation.rotation, 'x', -Math.PI, Math.PI);
-
+	// renderer
 	var renderer = new THREE.WebGLRenderer();
-	renderer.shadowMap.enabled = true;
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.setClearColor('rgb(120, 120, 120)');
+	renderer.shadowMap.enabled = true;
 	document.getElementById('webgl').appendChild(renderer.domElement);
 
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-	update(renderer, scene, camera, controls, clock);
+	update(renderer, scene, camera, controls);
 
 	return scene;
 }
 
-function getBox(w, h, d) {
-	var geometry = new THREE.BoxGeometry(w, h, d);
-	var material = new THREE.MeshPhongMaterial({
-		color: 'rgb(120, 120, 120)'
-	});
-	var mesh = new THREE.Mesh(
-		geometry,
-		material
-	);
-	mesh.castShadow = true;
+function getSphere(material, size, segments) {
+	var geometry = new THREE.SphereGeometry(size, segments, segments);
+	var obj = new THREE.Mesh(geometry, material);
+	obj.castShadow = true;
 
-	return mesh;
+	return obj;
 }
 
-function getBoxGrid(amount, separationMultiplier) {
-	var group = new THREE.Group();
+function getMaterial(type, color) {
+	var selectedMaterial;
+	var materialOptions = {
+		color: color === undefined ? 'rgb(255, 255, 255)' : color,
+	};
 
-	for (var i = 0; i < amount; i++) {
-		var obj = getBox(1, 1, 1);
-		obj.position.x = i * separationMultiplier;
-		obj.position.y = obj.geometry.parameters.height / 2;
-		group.add(obj);
-		for (var j = 1; j < amount; j++) {
-			var obj = getBox(1, 1, 1);
-			obj.position.x = i * separationMultiplier;
-			obj.position.y = obj.geometry.parameters.height / 2;
-			obj.position.z = j * separationMultiplier;
-			group.add(obj);
-		}
+	switch (type) {
+		case 'basic':
+			selectedMaterial = new THREE.MeshBasicMaterial(materialOptions);
+			break;
+		case 'lambert':
+			selectedMaterial = new THREE.MeshLambertMaterial(materialOptions);
+			break;
+		case 'phong':
+			selectedMaterial = new THREE.MeshPhongMaterial(materialOptions);
+			break;
+		case 'standard':
+			selectedMaterial = new THREE.MeshStandardMaterial(materialOptions);
+			break;
+		default:
+			selectedMaterial = new THREE.MeshBasicMaterial(materialOptions);
+			break;
 	}
 
-	group.position.x = -(separationMultiplier * (amount - 1)) / 2;
-	group.position.z = -(separationMultiplier * (amount - 1)) / 2;
-
-	return group;
+	return selectedMaterial;
 }
 
-function getPlane(size) {
-	var geometry = new THREE.PlaneGeometry(size, size);
-	var material = new THREE.MeshPhongMaterial({
-		color: 'rgb(120, 120, 120)',
-		side: THREE.DoubleSide
-	});
-	var mesh = new THREE.Mesh(
-		geometry,
-		material
-	);
-	mesh.receiveShadow = true;
-
-	return mesh;
-}
-
-function getSphere(size) {
-	var geometry = new THREE.SphereGeometry(size, 24, 24);
-	var material = new THREE.MeshBasicMaterial({
-		color: 'rgb(255, 255, 255)'
-	});
-	var mesh = new THREE.Mesh(
-		geometry,
-		material
-	);
-
-	return mesh;
-}
-
-function getPointLight(intensity) {
-	var light = new THREE.PointLight(0xffffff, intensity);
+function getSpotLight(intensity, color) {
+	color = color === undefined ? 'rgb(255, 255, 255)' : color;
+	var light = new THREE.SpotLight(color, intensity);
 	light.castShadow = true;
+	light.penumbra = 0.5;
 
-	return light;
-}
-
-function getSpotLight(intensity) {
-	var light = new THREE.SpotLight(0xffffff, intensity);
-	light.castShadow = true;
-
+	//Set up shadow properties for the light
+	light.shadow.mapSize.width = 1024;  // default: 512
+	light.shadow.mapSize.height = 1024; // default: 512
 	light.shadow.bias = 0.001;
-	light.shadow.mapSize.width = 2048;
-	light.shadow.mapSize.height = 2048;
 
 	return light;
 }
 
-function getDirectionalLight(intensity) {
-	var light = new THREE.DirectionalLight(0xffffff, intensity);
-	light.castShadow = true;
+function getPlane(material, size) {
+	var geometry = new THREE.PlaneGeometry(size, size);
+	material.side = THREE.DoubleSide;
+	var obj = new THREE.Mesh(geometry, material);
+	obj.receiveShadow = true;
 
-	light.shadow.camera.left = -10;
-	light.shadow.camera.bottom = -10;
-	light.shadow.camera.right = 10;
-	light.shadow.camera.top = 10;
-
-	return light;
+	return obj;
 }
 
-function update(renderer, scene, camera, controls, clock) {
-	renderer.render(
-		scene,
-		camera
-	);
-
+function update(renderer, scene, camera, controls) {
 	controls.update();
-
-	var timeElapsed = clock.getElapsedTime();
-
-	var boxGrid = scene.getObjectByName('boxGrid');
-	boxGrid.children.forEach(function (child, index) {
-		var x = timeElapsed * 5 + index;
-		child.scale.y = (noise.simplex2(x, x) + 1) / 2 + 0.001;
-		child.position.y = child.scale.y / 2;
-	});
-
+	renderer.render(scene, camera);
 	requestAnimationFrame(function () {
-		update(renderer, scene, camera, controls, clock);
-	})
+		update(renderer, scene, camera, controls);
+	});
 }
 
 var scene = init();
-
-// Purpose of Animation Rig: An animation rig consists of helper objects to facilitate the animation process, making it easier to manage transformations.
-// Creating Controllers: The video demonstrates creating controllers for the camera's z position, y rotation, and x rotation to control the camera's movement and rotation.
-// Managing Transformations: Isolating specific transformations to specific objects helps keep the animation process manageable and allows for more complex movements.
-
-
-// Camera Positioning: Adjusting the camera's Z and Y positions to move it closer to the scene and higher above the ground plane.
-// Scene Adjustments: Enlarging the ground plane and increasing the separation between boxes to create a larger scene.
-// Tumbling Animation: Adding a rotation controller for the Z axis to create a natural tumbling motion for the camera.
-// Noise Function: Using the Perlin noise function to add subtle, natural-looking camera movements.
