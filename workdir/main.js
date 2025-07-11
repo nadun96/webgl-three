@@ -3,10 +3,10 @@ function init() {
 	var gui = new dat.GUI();
 
 	// initialize objects
-	var sphereMaterial = getMaterial('basic', 'rgb(255, 0, 0)');
+	var sphereMaterial = getMaterial('phong', 'rgb(255, 255, 255)');
 	var sphere = getSphere(sphereMaterial, 1, 24);
 
-	var planeMaterial = getMaterial('basic', 'rgb(0, 0, 255)');
+	var planeMaterial = getMaterial('phong', 'rgb(255, 255, 255)');
 	var plane = getPlane(planeMaterial, 30);
 
 	var lightLeft = getSpotLight(1, 'rgb(255, 220, 180)');
@@ -38,6 +38,11 @@ function init() {
 	folder2.add(lightRight.position, 'x', -5, 15);
 	folder2.add(lightRight.position, 'y', -5, 15);
 	folder2.add(lightRight.position, 'z', -5, 15);
+
+	var folder3 = gui.addFolder('materials');
+	folder3.add(sphereMaterial, 'shininess', 0, 1000);
+	folder3.add(planeMaterial, 'shininess', 0, 1000);
+	folder3.open();
 
 	// add objects to the scene
 	scene.add(sphere);
@@ -112,8 +117,8 @@ function getSpotLight(intensity, color) {
 	light.penumbra = 0.5;
 
 	//Set up shadow properties for the light
-	light.shadow.mapSize.width = 1024;  // default: 512
-	light.shadow.mapSize.height = 1024; // default: 512
+	light.shadow.mapSize.width = 2048;  // default: 512
+	light.shadow.mapSize.height = 2048; // default: 512
 	light.shadow.bias = 0.001;
 
 	return light;
@@ -137,3 +142,8 @@ function update(renderer, scene, camera, controls) {
 }
 
 var scene = init();
+
+
+// MeshLambertMaterial: This material is good for simulating shiny surfaces like rubber, clay, or stone. It uses a simple shading model and is less computationally intensive, but it may not produce the most accurate results.
+// MeshPhongMaterial: This material allows for more control over highlights and shininess, making it better for simulating glossy surfaces like metal. It has a "shininess" attribute that can be adjusted to make reflections sharper or rougher.
+// Practical Use: Use MeshLambertMaterial for simpler, less reflective surfaces and MeshPhongMaterial for more detailed, glossy surfaces. Adjusting the shininess parameter can help achieve the desired look for different materials.
