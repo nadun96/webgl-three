@@ -3,10 +3,10 @@ function init() {
 	var gui = new dat.GUI();
 
 	// initialize objects
-	var sphereMaterial = getMaterial('phong', 'rgb(255, 255, 255)');
+	var sphereMaterial = getMaterial('standard', 'rgb(255, 255, 255)');
 	var sphere = getSphere(sphereMaterial, 1, 24);
 
-	var planeMaterial = getMaterial('phong', 'rgb(255, 255, 255)');
+	var planeMaterial = getMaterial('standard', 'rgb(255, 255, 255)');
 	var plane = getPlane(planeMaterial, 30);
 
 	var lightLeft = getSpotLight(1, 'rgb(255, 220, 180)');
@@ -40,8 +40,10 @@ function init() {
 	folder2.add(lightRight.position, 'z', -5, 15);
 
 	var folder3 = gui.addFolder('materials');
-	folder3.add(sphereMaterial, 'shininess', 0, 1000);
-	folder3.add(planeMaterial, 'shininess', 0, 1000);
+	folder3.add(sphereMaterial, 'roughness', 0, 1);
+	folder3.add(planeMaterial, 'roughness', 0, 1);
+	folder3.add(sphereMaterial, 'metalness', 0, 1);
+	folder3.add(planeMaterial, 'metalness', 0, 1);
 	folder3.open();
 
 	// add objects to the scene
@@ -144,6 +146,7 @@ function update(renderer, scene, camera, controls) {
 var scene = init();
 
 
-// MeshLambertMaterial: This material is good for simulating shiny surfaces like rubber, clay, or stone. It uses a simple shading model and is less computationally intensive, but it may not produce the most accurate results.
-// MeshPhongMaterial: This material allows for more control over highlights and shininess, making it better for simulating glossy surfaces like metal. It has a "shininess" attribute that can be adjusted to make reflections sharper or rougher.
-// Practical Use: Use MeshLambertMaterial for simpler, less reflective surfaces and MeshPhongMaterial for more detailed, glossy surfaces. Adjusting the shininess parameter can help achieve the desired look for different materials.
+// Realistic Results: MeshStandardMaterial uses physically based rendering, which provides much more realistic results compared to older materials like MeshLambertMaterial and MeshPhongMaterial.
+// Parameters: It includes parameters like "roughness" and "metalness" to control the sharpness of reflections and the metallic appearance of objects.
+// Computational Cost: This material is computationally more expensive but is widely used in modern game engines and visual effects for its realistic output.
+// Texture Maps: For achieving even more realistic scenes, it's essential to use texture maps along with MeshStandardMaterial.
