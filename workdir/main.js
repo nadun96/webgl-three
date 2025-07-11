@@ -25,6 +25,18 @@ function init() {
 	lightRight.position.z = -4;
 
 	// manipulate materials
+	var loader = new THREE.TextureLoader();
+	planeMaterial.map = loader.load('/assets/textures/concrete.jpg');
+	planeMaterial.bumpMap = loader.load('/assets/textures/concrete.jpg');
+	planeMaterial.bumpScale = 0.01;
+
+	var maps = ['map', 'bumpMap'];
+	maps.forEach(function (mapName) {
+		var texture = planeMaterial[mapName];
+		texture.wrapS = THREE.RepeatWrapping;
+		texture.wrapT = THREE.RepeatWrapping;
+		texture.repeat.set(1.5, 1.5);
+	});
 
 	// dat.gui
 	var folder1 = gui.addFolder('light_1');
@@ -146,7 +158,6 @@ function update(renderer, scene, camera, controls) {
 var scene = init();
 
 
-// Realistic Results: MeshStandardMaterial uses physically based rendering, which provides much more realistic results compared to older materials like MeshLambertMaterial and MeshPhongMaterial.
-// Parameters: It includes parameters like "roughness" and "metalness" to control the sharpness of reflections and the metallic appearance of objects.
-// Computational Cost: This material is computationally more expensive but is widely used in modern game engines and visual effects for its realistic output.
-// Texture Maps: For achieving even more realistic scenes, it's essential to use texture maps along with MeshStandardMaterial.
+// Purpose: Texture maps are 2D images used to provide surface detail on 3D objects, affecting qualities like color, reflectiveness, and roughness.
+// Application: Textures can be derived from photos or created from scratch and should be seamless for best results. They can be applied using properties like map for color and bumpMap for simulating height effects.
+// Optimization: Adjusting properties such as wrapS, wrapT, and repeat can enhance texture resolution and appearance. Using seamless textures or image processing tools can improve the final look.
