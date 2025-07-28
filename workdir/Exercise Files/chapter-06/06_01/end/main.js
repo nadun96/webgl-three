@@ -1,8 +1,8 @@
 var GEO_TYPES = [
-	'box', 
-	'cone', 
-	'cylinder', 
-	'octahedron', 
+	'box',
+	'cone',
+	'cylinder',
+	'octahedron',
 	'sphere',
 	'tetrahedron',
 	'torus',
@@ -18,7 +18,7 @@ function init() {
 
 	var geoTypes = GEO_TYPES;
 
-	geoTypes.forEach(function(type) {
+	geoTypes.forEach(function (type) {
 		var geo = getGeometry(type, 5, objMaterial);
 		scene.add(geo);
 	});
@@ -44,7 +44,7 @@ function init() {
 	var format = '.jpg';
 	var fileNames = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
 
-	var reflectionCube = new THREE.CubeTextureLoader().load(fileNames.map(function(fileName) {
+	var reflectionCube = new THREE.CubeTextureLoader().load(fileNames.map(function (fileName) {
 		return path + fileName + format;
 	}));
 	scene.background = reflectionCube;
@@ -108,25 +108,25 @@ function getGeometry(type, size, material) {
 			geometry = new THREE.BoxGeometry(size, size, size);
 			break;
 		case 'cone':
-			geometry = new THREE.ConeGeometry(size, size, 256*segmentMultiplier);
+			geometry = new THREE.ConeGeometry(size, size, 256 * segmentMultiplier);
 			break;
 		case 'cylinder':
-			geometry = new THREE.CylinderGeometry(size, size, size, 32*segmentMultiplier);
+			geometry = new THREE.CylinderGeometry(size, size, size, 32 * segmentMultiplier);
 			break;
 		case 'octahedron':
 			geometry = new THREE.OctahedronGeometry(size);
 			break;
 		case 'sphere':
-			geometry = new THREE.SphereGeometry(size, 32*segmentMultiplier, 32*segmentMultiplier);
+			geometry = new THREE.SphereGeometry(size, 32 * segmentMultiplier, 32 * segmentMultiplier);
 			break;
 		case 'tetrahedron':
 			geometry = new THREE.TetrahedronGeometry(size);
 			break;
 		case 'torus':
-			geometry = new THREE.TorusGeometry(size/2, size/4, 16*segmentMultiplier, 100*segmentMultiplier);
+			geometry = new THREE.TorusGeometry(size / 2, size / 4, 16 * segmentMultiplier, 100 * segmentMultiplier);
 			break;
 		case 'torusKnot':
-			geometry = new THREE.TorusKnotGeometry(size/2, size/6, 256*segmentMultiplier, 100*segmentMultiplier);
+			geometry = new THREE.TorusKnotGeometry(size / 2, size / 6, 256 * segmentMultiplier, 100 * segmentMultiplier);
 			break;
 		default:
 			break;
@@ -159,7 +159,7 @@ function getMaterial(type, color) {
 		case 'standard':
 			selectedMaterial = new THREE.MeshStandardMaterial(materialOptions);
 			break;
-		default: 
+		default:
 			selectedMaterial = new THREE.MeshBasicMaterial(materialOptions);
 			break;
 	}
@@ -202,7 +202,7 @@ function update(renderer, scene, camera, clock) {
 	var geoTypes = GEO_TYPES;
 
 	var currentIndex = Math.floor((clock.getElapsedTime() / 4) % geoTypes.length);
-	geoTypes.forEach(function(geo, index) {
+	geoTypes.forEach(function (geo, index) {
 		var currentObj = scene.getObjectByName(geo);
 		if (index === currentIndex) {
 			currentObj.visible = true;
@@ -212,9 +212,15 @@ function update(renderer, scene, camera, clock) {
 	})
 
 	renderer.render(scene, camera);
-	requestAnimationFrame(function() {
+	requestAnimationFrame(function () {
 		update(renderer, scene, camera, clock);
 	});
 }
 
 var scene = init();
+
+
+// Primitive Geometries: These are basic shapes like cubes, spheres, and planes used as building blocks for more complex geometries in Three.js.
+// Modeling Process: Primitive geometries can be modified by manipulating vertices, edges, and faces to create desired shapes.
+// Wireframe Property: Using the wireframe property helps visualize the structure of geometries, showing how vertices and edges form the shape.
+// Segment Values: Adjusting segment values changes the density and smoothness of the geometry's surface, affecting render times and visual quality.
