@@ -7,7 +7,7 @@ function init() {
 	var sphere = getSphere(sphereMaterial, 1, 24);
 
 	var planeMaterial = getMaterial('standard', 'rgb(255, 255, 255)');
-	var plane = getPlane(planeMaterial, 30);
+	var plane = getPlane(planeMaterial, 300);
 
 	var lightLeft = getSpotLight(1, 'rgb(255, 220, 180)');
 	var lightRight = getSpotLight(1, 'rgb(255, 220, 180)');
@@ -25,6 +25,19 @@ function init() {
 	lightRight.position.z = -4;
 
 	// manipulate materials
+	// load the cube map
+	var path = './assets/cubemap/';
+	var format = '.jpg';
+	var urls = [
+		path + 'px' + format, path + 'nx' + format,
+		path + 'py' + format, path + 'ny' + format,
+		path + 'pz' + format, path + 'nz' + format
+	];
+	var reflectionCube = new THREE.CubeTextureLoader().load(urls);
+	reflectionCube.format = THREE.RGBFormat;
+
+	scene.background = reflectionCube;
+
 	var loader = new THREE.TextureLoader();
 	planeMaterial.map = loader.load('./assets/textures/concrete.jpg');
 	planeMaterial.bumpMap = loader.load('./assets/textures/concrete.jpg');
@@ -32,14 +45,16 @@ function init() {
 	planeMaterial.bumpScale = 0.01;
 	planeMaterial.metalness = 0.1;
 	planeMaterial.roughness = 0.7;
+	planeMaterial.envMap = reflectionCube;
 	sphereMaterial.roughnessMap = loader.load('./assets/textures/fingerprints.jpg');
+	sphereMaterial.envMap = reflectionCube;
 
 	var maps = ['map', 'bumpMap', 'roughnessMap'];
 	maps.forEach(function (mapName) {
 		var texture = planeMaterial[mapName];
 		texture.wrapS = THREE.RepeatWrapping;
 		texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set(1.5, 1.5);
+		texture.repeat.set(15, 15);
 	});
 
 	// dat.gui
@@ -162,7 +177,6 @@ function update(renderer, scene, camera, controls) {
 var scene = init();
 
 
-
-// Purpose of Roughness Maps: Roughness maps control the sharpness of reflections on a surface using the brightness values of an image.
-// Application in Three.js: The video demonstrates how to load and apply a roughness map to a material, using a checkerboard texture as an example.
-// Effect on Reflections: Roughness maps create variations in reflections, with darker areas appearing glossier and lighter areas appearing rougher, adding realism to the surface.
+// Environment Maps: These simulate the distant environment reflecting off surfaces, enhancing the realism of reflective objects in the scene.
+// Cubemaps: Environment maps in Three.js are typically in the form of cubemaps, which consist of six images corresponding to the faces of a cube.
+// Implementation: The video demonstrates how to load a cubemap using the CubeTextureLoader and apply it to materials and the scene background to achieve realistic reflections.
