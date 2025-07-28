@@ -30,7 +30,7 @@ function init() {
 	var format = '.jpg';
 	var fileNames = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
 
-	var reflectionCube = new THREE.CubeTextureLoader().load(fileNames.map(function(fileName) {
+	var reflectionCube = new THREE.CubeTextureLoader().load(fileNames.map(function (fileName) {
 		return path + fileName + format;
 	}));
 	scene.background = reflectionCube;
@@ -60,7 +60,7 @@ function init() {
 		var bumpMap = textureLoader.load('/assets/models/head/Face_Disp.jpg');
 		var faceMaterial = getMaterial('standard', 'rgb(255, 255, 255)');
 
-		object.traverse(function(child) {
+		object.traverse(function (child) {
 			if (child.name == 'Plane') {
 				child.visible = false;
 			}
@@ -73,7 +73,7 @@ function init() {
 				faceMaterial.metalness = 0;
 				faceMaterial.bumpScale = 0.175;
 			}
-		} );
+		});
 
 		object.scale.x = 20;
 		object.scale.y = 20;
@@ -89,7 +89,7 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.shadowMap.enabled = true;
 
-	var controls = new THREE.OrbitControls( camera, renderer.domElement );
+	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 	document.getElementById('webgl').appendChild(renderer.domElement);
 
@@ -117,7 +117,7 @@ function getMaterial(type, color) {
 		case 'standard':
 			selectedMaterial = new THREE.MeshStandardMaterial(materialOptions);
 			break;
-		default: 
+		default:
 			selectedMaterial = new THREE.MeshBasicMaterial(materialOptions);
 			break;
 	}
@@ -142,9 +142,16 @@ function getSpotLight(intensity, color) {
 function update(renderer, scene, camera, controls) {
 	controls.update();
 	renderer.render(scene, camera);
-	requestAnimationFrame(function() {
+	requestAnimationFrame(function () {
 		update(renderer, scene, camera, controls);
 	});
 }
 
 var scene = init();
+
+
+
+// Advanced 3D Models: For more complex 3D scenes, you can use advanced 3D models created in software like Blender, Maya, or Modo, and import them into Three.js.
+// Using External Models: You can find free or paid 3D models on repositories like TurboSquid, Sketchfab, and Clara.io. These models can be previewed in the browser using WebGL technologies.
+// Loading External Geometries: Three.js supports various file types (e.g., FBX, OBJ, STL). To load an external file, use the corresponding loader JavaScript file, such as OBJLoader for OBJ files.
+// UV Mapping: Using pre-made models saves time and effort, as they often come with textures and UV mapping, which defines how 2D textures map onto 3D surfaces.
