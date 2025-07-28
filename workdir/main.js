@@ -102,3 +102,37 @@ var scene = init();
 // Geometry and Vertices: Geometries have a vertices property, which is an array containing all the vertices. You can loop through this array to adjust vertex positions.
 // Updating Vertices: After modifying vertices, set the verticesNeedUpdate property to true to inform Three.js that the vertices have been updated and need recalculating.
 // Using Math Functions: Functions like Math.random and Math.sin can be used to create dynamic effects on vertex positions, such as adding randomness or smooth waves.
+
+
+
+// Select the Plane:
+// javascript
+// var plane = scene.getObjectByName('plane-1');
+
+// Access the Geometry:
+// javascript
+// var planeGeo = plane.geometry;
+
+// Loop Through Vertices:
+// javascript
+// planeGeo.vertices.forEach(function(vertex) {
+// vertex.z += Math.random();
+// });
+
+// Update Vertices:
+// javascript
+// planeGeo.verticesNeedUpdate = true;
+
+// Use Math Functions for Smoother Effects:
+
+// Instantiate a clock object:
+// javascript
+// var clock = new THREE.Clock();
+
+// Update the function to use Math.sin:
+// javascript
+// var elapsedTime = clock.getElapsedTime();
+// planeGeo.vertices.forEach(function(vertex, index) {
+// vertex.z += Math.sin(elapsedTime + index) * 0.1;
+// });
+// planeGeo.verticesNeedUpdate = true;
