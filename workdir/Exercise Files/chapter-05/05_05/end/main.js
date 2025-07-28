@@ -14,7 +14,7 @@ function init() {
 
 	// manipulate objects
 	sphere.position.y = sphere.geometry.parameters.radius;
-	plane.rotation.x = Math.PI/2;
+	plane.rotation.x = Math.PI / 2;
 
 	lightLeft.position.x = -5;
 	lightLeft.position.y = 2;
@@ -35,7 +35,7 @@ function init() {
 	sphereMaterial.roughnessMap = loader.load('/assets/textures/fingerprints.jpg');
 
 	var maps = ['map', 'bumpMap', 'roughnessMap'];
-	maps.forEach(function(mapName) {
+	maps.forEach(function (mapName) {
 		var texture = planeMaterial[mapName];
 		texture.wrapS = THREE.RepeatWrapping;
 		texture.wrapT = THREE.RepeatWrapping;
@@ -85,9 +85,9 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.shadowMap.enabled = true;
 	document.getElementById('webgl').appendChild(renderer.domElement);
-	
-	var controls = new THREE.OrbitControls( camera, renderer.domElement );
-	
+
+	var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
 	update(renderer, scene, camera, controls);
 
 	return scene;
@@ -120,7 +120,7 @@ function getMaterial(type, color) {
 		case 'standard':
 			selectedMaterial = new THREE.MeshStandardMaterial(materialOptions);
 			break;
-		default: 
+		default:
 			selectedMaterial = new THREE.MeshBasicMaterial(materialOptions);
 			break;
 	}
@@ -154,7 +154,7 @@ function getPlane(material, size) {
 function update(renderer, scene, camera, controls) {
 	controls.update();
 	renderer.render(scene, camera);
-	requestAnimationFrame(function() {
+	requestAnimationFrame(function () {
 		update(renderer, scene, camera, controls);
 	});
 }

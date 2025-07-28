@@ -28,9 +28,13 @@ function init() {
 	var loader = new THREE.TextureLoader();
 	planeMaterial.map = loader.load('./assets/textures/concrete.jpg');
 	planeMaterial.bumpMap = loader.load('./assets/textures/concrete.jpg');
+	planeMaterial.roughnessMap = loader.load('./assets/textures/concrete.jpg');
 	planeMaterial.bumpScale = 0.01;
+	planeMaterial.metalness = 0.1;
+	planeMaterial.roughness = 0.7;
+	sphereMaterial.roughnessMap = loader.load('./assets/textures/fingerprints.jpg');
 
-	var maps = ['map', 'bumpMap'];
+	var maps = ['map', 'bumpMap', 'roughnessMap'];
 	maps.forEach(function (mapName) {
 		var texture = planeMaterial[mapName];
 		texture.wrapS = THREE.RepeatWrapping;
@@ -158,6 +162,7 @@ function update(renderer, scene, camera, controls) {
 var scene = init();
 
 
-// Purpose: Texture maps are 2D images used to provide surface detail on 3D objects, affecting qualities like color, reflectiveness, and roughness.
-// Application: Textures can be derived from photos or created from scratch and should be seamless for best results. They can be applied using properties like map for color and bumpMap for simulating height effects.
-// Optimization: Adjusting properties such as wrapS, wrapT, and repeat can enhance texture resolution and appearance. Using seamless textures or image processing tools can improve the final look.
+
+// Purpose of Roughness Maps: Roughness maps control the sharpness of reflections on a surface using the brightness values of an image.
+// Application in Three.js: The video demonstrates how to load and apply a roughness map to a material, using a checkerboard texture as an example.
+// Effect on Reflections: Roughness maps create variations in reflections, with darker areas appearing glossier and lighter areas appearing rougher, adding realism to the surface.
