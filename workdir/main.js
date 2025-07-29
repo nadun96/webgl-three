@@ -8,32 +8,27 @@ function init() {
 		1, // near clipping plane
 		1000 // far clipping plane
 	);
-	camera.position.z = 0;
+	camera.position.z = 30;
 	camera.position.x = 0;
-	camera.position.y = 1;
+	camera.position.y = 20;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-	var particleGeo = new THREE.Geometry();
 	var particleMat = new THREE.PointsMaterial({
 		color: 'rgb(255, 255, 255)',
-		size: 1,
+		size: 0.25,
 		map: new THREE.TextureLoader().load('./assets/textures/particle.jpg'),
 		transparent: true,
 		blending: THREE.AdditiveBlending,
 		depthWrite: false
 	});
 
-	var particleCount = 20000;
-	var particleDistance = 100;
+	var particleGeo = new THREE.SphereGeometry(10, 64, 64);
 
-	for (var i = 0; i < particleCount; i++) {
-		var posX = (Math.random() - 0.5) * particleDistance;
-		var posY = (Math.random() - 0.5) * particleDistance;
-		var posZ = (Math.random() - 0.5) * particleDistance;
-		var particle = new THREE.Vector3(posX, posY, posZ);
-
-		particleGeo.vertices.push(particle);
-	}
+	particleGeo.vertices.forEach(function (vertex) {
+		vertex.x += (Math.random() - 0.5);
+		vertex.y += (Math.random() - 0.5);
+		vertex.z += (Math.random() - 0.5);
+	});
 
 	var particleSystem = new THREE.Points(
 		particleGeo,
@@ -66,29 +61,6 @@ function update(renderer, scene, camera, controls) {
 	var particleSystem = scene.getObjectByName('particleSystem');
 	particleSystem.rotation.y += 0.005;
 
-	particleSystem.geometry.vertices.forEach(function (particle) {
-		particle.x += (Math.random() - 1) * 0.1;
-		particle.y += (Math.random() - 0.75) * 0.1;
-		particle.z += (Math.random()) * 0.1;
-
-		if (particle.x < -50) {
-			particle.x = 50;
-		}
-
-		if (particle.y < -50) {
-			particle.y = 50;
-		}
-
-		if (particle.z < -50) {
-			particle.z = 50;
-		}
-
-		if (particle.z > 50) {
-			particle.z = -50;
-		}
-	});
-	particleSystem.geometry.verticesNeedUpdate = true;
-
 	requestAnimationFrame(function () {
 		update(renderer, scene, camera, controls);
 	});
@@ -97,8 +69,7 @@ function update(renderer, scene, camera, controls) {
 var scene = init();
 
 
-
-// Animating Particles: Loop through each particle (vertex) in the particle system and update their positions by adding random values with some directional bias.
-// Updating Vertices: Ensure the verticesNeedUpdate property is set to true to reflect changes in the particle positions.
-// Resetting Positions: Prevent particles from disappearing by resetting their positions once they move beyond a certain threshold.
-// Adding Rotation: Enhance the animation by adding a rotation to the entire particle system.
+// Using Existing Geometry: Instead of creating an empty geometry, you can use an existing geometry (e.g., SphereGeometry) to create a particle system.
+// Adjusting Camera and Particle Size: Move the camera back and adjust the particle size for better visibility of the particle system.
+// Randomizing Vertex Positions: Add randomization to the initial positions of the vertices to avoid an overly orderly appearance.
+// Increasing Particle Count: Increase the number of segments in the underlying geometry to get more particles.
