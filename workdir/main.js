@@ -1,5 +1,7 @@
 function init() {
 	var scene = new THREE.Scene();
+	var stats = new Stats();
+	document.body.appendChild(stats.dom);
 
 	// camera
 	var camera = new THREE.PerspectiveCamera(
@@ -48,28 +50,31 @@ function init() {
 
 	document.getElementById('webgl').appendChild(renderer.domElement);
 
-	update(renderer, scene, camera, controls);
+	update(renderer, scene, camera, controls, stats);
 
 	return scene;
 }
 
 
-function update(renderer, scene, camera, controls) {
+function update(renderer, scene, camera, controls, stats) {
 	controls.update();
+	stats.update();
+
 	renderer.render(scene, camera);
 
 	var particleSystem = scene.getObjectByName('particleSystem');
 	particleSystem.rotation.y += 0.005;
 
 	requestAnimationFrame(function () {
-		update(renderer, scene, camera, controls);
+		update(renderer, scene, camera, controls, stats);
 	});
 }
 
 var scene = init();
 
 
-// Using Existing Geometry: Instead of creating an empty geometry, you can use an existing geometry (e.g., SphereGeometry) to create a particle system.
-// Adjusting Camera and Particle Size: Move the camera back and adjust the particle size for better visibility of the particle system.
-// Randomizing Vertex Positions: Add randomization to the initial positions of the vertices to avoid an overly orderly appearance.
-// Increasing Particle Count: Increase the number of segments in the underlying geometry to get more particles.
+
+
+// Monitoring Performance: The video discusses using the stats.js library to monitor the performance of 3D scenes by displaying the frames per second (FPS).
+// Implementation Steps: It covers how to include the stats.js library in your project, instantiate it, and append its DOM element to the HTML body.
+// Usage in Update Function: The video explains how to integrate stats.js into the update function to continuously monitor and display the FPS, helping identify performance issues in your three.js scenes.
